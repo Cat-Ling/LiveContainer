@@ -1,17 +1,17 @@
 import Foundation
 import UniformTypeIdentifiers
 
-public struct LCContainerManifestInfo: Codable, Hashable {
-    public var folderName: String
-    public var name: String
-    public var isDefault: Bool
-    public var isShared: Bool
-    public var isolateAppGroup: Bool
-    public var spoofIdentifierForVendor: Bool
-    public var spoofedIdentifier: String?
-    public var keychainGroupId: Int?
+struct LCContainerManifestInfo: Codable, Hashable {
+    var folderName: String
+    var name: String
+    var isDefault: Bool
+    var isShared: Bool
+    var isolateAppGroup: Bool
+    var spoofIdentifierForVendor: Bool
+    var spoofedIdentifier: String?
+    var keychainGroupId: Int?
 
-    public init(
+    init(
         folderName: String,
         name: String,
         isDefault: Bool = false,
@@ -32,28 +32,28 @@ public struct LCContainerManifestInfo: Codable, Hashable {
     }
 }
 
-public struct LCBundleAppSettings: Codable {
-    public var isJITNeeded: Bool
-    public var classicMode: Bool
-    public var isLocked: Bool
-    public var isHidden: Bool
-    public var spoofSDKVersion: Bool
-    public var doSymlinkInbox: Bool
-    public var doUseLCBundleId: Bool
-    public var fixFilePickerNew: Bool
-    public var fixLocalNotification: Bool
-    public var hideLiveContainer: Bool
-    public var dontInjectTweakLoader: Bool
-    public var dontLoadTweakLoader: Bool
-    public var dontSign: Bool
-    public var orientationLock: Int
-    public var selectedLanguage: String?
-    public var selected32BitEmulator: String?
-    public var remark: String?
-    public var multitaskSpecified: Int
-    public var jitLaunchScriptJs: String?
+struct LCBundleAppSettings: Codable {
+    var isJITNeeded: Bool
+    var classicMode: Bool
+    var isLocked: Bool
+    var isHidden: Bool
+    var spoofSDKVersion: Bool
+    var doSymlinkInbox: Bool
+    var doUseLCBundleId: Bool
+    var fixFilePickerNew: Bool
+    var fixLocalNotification: Bool
+    var hideLiveContainer: Bool
+    var dontInjectTweakLoader: Bool
+    var dontLoadTweakLoader: Bool
+    var dontSign: Bool
+    var orientationLock: Int
+    var selectedLanguage: String?
+    var selected32BitEmulator: String?
+    var remark: String?
+    var multitaskSpecified: Int
+    var jitLaunchScriptJs: String?
 
-    public init(
+    init(
         isJITNeeded: Bool = false,
         classicMode: Bool = false,
         isLocked: Bool = false,
@@ -96,21 +96,21 @@ public struct LCBundleAppSettings: Codable {
     }
 }
 
-public struct LCAppBundleManifest: Codable {
-    public var formatVersion: Int
-    public var bundleIdentifier: String
-    public var version: String
-    public var displayName: String
-    public var createdAt: Date?
-    public var liveContainerVersion: String?
-    public var hasAppBundle: Bool
-    public var appRelativePath: String?
-    public var defaultDataUUID: String?
-    public var containers: [LCContainerManifestInfo]
-    public var tweakFolder: String?
-    public var appSettings: LCBundleAppSettings?
+struct LCAppBundleManifest: Codable {
+    var formatVersion: Int
+    var bundleIdentifier: String
+    var version: String
+    var displayName: String
+    var createdAt: Date?
+    var liveContainerVersion: String?
+    var hasAppBundle: Bool
+    var appRelativePath: String?
+    var defaultDataUUID: String?
+    var containers: [LCContainerManifestInfo]
+    var tweakFolder: String?
+    var appSettings: LCBundleAppSettings?
 
-    public init(
+    init(
         formatVersion: Int = 1,
         bundleIdentifier: String,
         version: String,
@@ -139,13 +139,13 @@ public struct LCAppBundleManifest: Codable {
     }
 }
 
-public struct LCBundleExportOptions {
-    public var includeAppBundle: Bool
-    public var includeData: Bool
-    public var selectedContainers: [LCContainer]
-    public var includeTweaks: Bool
+struct LCBundleExportOptions {
+    var includeAppBundle: Bool
+    var includeData: Bool
+    var selectedContainers: [LCContainer]
+    var includeTweaks: Bool
 
-    public init(
+    init(
         includeAppBundle: Bool = true,
         includeData: Bool = true,
         selectedContainers: [LCContainer] = [],
@@ -158,7 +158,7 @@ public struct LCBundleExportOptions {
     }
 }
 
-public enum LCAppBundleError: LocalizedError {
+enum LCAppBundleError: LocalizedError {
     case noContentsSelected
     case sourceAppNotFound
     case compressionFailed
@@ -168,7 +168,7 @@ public enum LCAppBundleError: LocalizedError {
     case appNotInstalledForDataOnly(String)
     case cancelled
 
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .noContentsSelected:
             return "lc.bundle.selectAtLeastOne".loc
@@ -190,9 +190,9 @@ public enum LCAppBundleError: LocalizedError {
     }
 }
 
-public final class LCAppBundleService {
+final class LCAppBundleService {
 
-    public static func exportBundle(
+    static func exportBundle(
         app: LCAppModel,
         options: LCBundleExportOptions,
         progress: Progress
@@ -337,7 +337,7 @@ public final class LCAppBundleService {
         return outputZipURL
     }
 
-    public static func readManifest(from bundleExtractURL: URL) -> LCAppBundleManifest? {
+    static func readManifest(from bundleExtractURL: URL) -> LCAppBundleManifest? {
         let fm = FileManager.default
         let jsonURL = bundleExtractURL.appendingPathComponent("manifest.json")
         if fm.fileExists(atPath: jsonURL.path), let data = try? Data(contentsOf: jsonURL) {
@@ -359,7 +359,7 @@ public final class LCAppBundleService {
         return nil
     }
 
-    public static func findAppBundle(in bundleExtractURL: URL) async throws -> URL? {
+    static func findAppBundle(in bundleExtractURL: URL) async throws -> URL? {
         let fm = FileManager.default
         let payloadDir = bundleExtractURL.appendingPathComponent("Payload")
 
@@ -424,7 +424,7 @@ public final class LCAppBundleService {
         return nil
     }
 
-    public static func restoreContainers(
+    static func restoreContainers(
         from bundleExtractURL: URL,
         manifest: LCAppBundleManifest?,
         bundleId: String,
@@ -500,7 +500,7 @@ public final class LCAppBundleService {
         return (restoredContainers, manifest?.defaultDataUUID)
     }
 
-    public static func restoreTweaks(
+    static func restoreTweaks(
         from bundleExtractURL: URL,
         manifest: LCAppBundleManifest?,
         isShared: Bool
@@ -528,7 +528,7 @@ public final class LCAppBundleService {
         return tweakFolder
     }
 
-    public static func applySettings(
+    static func applySettings(
         from settings: LCBundleAppSettings,
         to appInfo: LCAppInfo
     ) {
@@ -556,7 +556,7 @@ public final class LCAppBundleService {
         if let remark = settings.remark {
             appInfo.remark = remark
         }
-        appInfo.multitaskSpecified = MultitaskSpecified(rawValue: settings.multitaskSpecified) ?? .MultitaskSpecifiedDefault
+        appInfo.multitaskSpecified = MultitaskSpecified(rawValue: settings.multitaskSpecified) ?? .default
         if let script = settings.jitLaunchScriptJs, !script.isEmpty {
             appInfo.jitLaunchScriptJs = script
         }
