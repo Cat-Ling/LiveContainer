@@ -202,6 +202,13 @@ final class LCAppBannerViewController: UIViewController, UIContextMenuInteractio
             self?.openSettings()
         })
 
+        sectionChildren.append(UIAction(
+            title: "lc.appBanner.exportBundle".loc,
+            image: UIImage(systemName: "shippingbox")
+        ) { [weak self] _ in
+            self?.exportBundle()
+        })
+
         if !model.uiIsShared {
             sectionChildren.append(UIAction(
                 title: "lc.appBanner.uninstall".loc,
@@ -241,6 +248,17 @@ final class LCAppBannerViewController: UIViewController, UIContextMenuInteractio
             return
         }
         UIApplication.shared.open(url)
+    }
+
+    private func exportBundle() {
+        let exportView = LCExportBundleView(model: configuration.model)
+        let hostingController = UIHostingController(rootView: exportView)
+        hostingController.modalPresentationStyle = .pageSheet
+        if #available(iOS 15.0, *), let sheet = hostingController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(hostingController, animated: true)
     }
 
     private func uninstall() async {

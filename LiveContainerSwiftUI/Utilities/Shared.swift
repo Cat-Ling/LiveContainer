@@ -195,6 +195,7 @@ extension UTType {
     static let deb = UTType(filenameExtension: "deb")!
     static let lcFramework = UTType(filenameExtension: "framework", conformingTo: .package)!
     static let p12 = UTType(filenameExtension: "p12")!
+    static let lcbundle = UTType(filenameExtension: "lcbundle") ?? UTType(importedAs: "com.livecontainer.bundle")
 }
 
 extension Color {

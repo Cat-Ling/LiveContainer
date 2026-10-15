@@ -1,6 +1,193 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "lc.appBanner.exportBundle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export App Bundle (.lcbundle)"
+          }
+        }
+      }
+    },
+    "lc.appList.installFromBundle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Install from App Bundle"
+          }
+        }
+      }
+    },
+    "lc.appSettings.exportBundle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export App Bundle (.lcbundle)"
+          }
+        }
+      }
+    },
+    "lc.bundle.appNotInstalledError %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This bundle contains data for %@, but the app is not installed in LiveContainer."
+          }
+        }
+      }
+    },
+    "lc.bundle.compressing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compressing bundle..."
+          }
+        }
+      }
+    },
+    "lc.bundle.contentOptions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bundle Contents"
+          }
+        }
+      }
+    },
+    "lc.bundle.dataRestoredSuccess %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App data restored successfully for %@."
+          }
+        }
+      }
+    },
+    "lc.bundle.exportAction" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export Bundle"
+          }
+        }
+      }
+    },
+    "lc.bundle.exportTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export App Bundle"
+          }
+        }
+      }
+    },
+    "lc.bundle.exporting" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing bundle..."
+          }
+        }
+      }
+    },
+    "lc.bundle.includeApp" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include App"
+          }
+        }
+      }
+    },
+    "lc.bundle.includeAppDesc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include app binary and resources (IPA payload)"
+          }
+        }
+      }
+    },
+    "lc.bundle.includeData" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include App Data"
+          }
+        }
+      }
+    },
+    "lc.bundle.includeDataDesc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include container documents, caches, and settings"
+          }
+        }
+      }
+    },
+    "lc.bundle.includeTweaks" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include Tweaks"
+          }
+        }
+      }
+    },
+    "lc.bundle.invalidBundleError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid bundle: no app or data found in archive."
+          }
+        }
+      }
+    },
+    "lc.bundle.selectAtLeastOne" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please select at least one item to export."
+          }
+        }
+      }
+    },
     "lc.appBanner.addToHomeScreen" : {
       "extractionState" : "manual",
       "localizations" : {

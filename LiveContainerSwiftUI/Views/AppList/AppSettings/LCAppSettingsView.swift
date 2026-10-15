@@ -37,6 +37,7 @@ struct LCAppSettingsView: View {
     @State private var errorShow = false
     @State private var errorInfo = ""
     @State private var selectUnusedContainerSheetShow = false
+    @State private var exportBundleSheetShow = false
     
     @EnvironmentObject private var sharedModel : SharedModel
     
@@ -103,6 +104,12 @@ struct LCAppSettingsView: View {
                     Button("lc.appSettings.toPrivateApp".loc) {
                         Task { await movePrivateDoc() }
                     }
+                }
+
+                Button {
+                    exportBundleSheetShow = true
+                } label: {
+                    Text("lc.appSettings.exportBundle".loc)
                 }
             } header: {
                 Text("lc.common.data".loc)
@@ -471,6 +478,9 @@ struct LCAppSettingsView: View {
         }
         .sheet(isPresented: $selectUnusedContainerSheetShow) {
             LCSelectContainerView(isPresent: $selectUnusedContainerSheetShow, delegate: self)
+        }
+        .sheet(isPresented: $exportBundleSheetShow) {
+            LCExportBundleView(model: model)
         }
         .fileImporter(isPresented: $choosingStorage, allowedContentTypes: [.folder]) { result in
             Task { await importDataStorage(result: result) }

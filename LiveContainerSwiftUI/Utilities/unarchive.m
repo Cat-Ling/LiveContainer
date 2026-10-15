@@ -2,6 +2,9 @@
 
 #include "archive.h"
 #include "archive_entry.h"
+#include <sys/stat.h>
+#include <unistd.h>
+#include <limits.h>
 
 static int
 copy_data(struct archive *ar, struct archive *aw, NSProgress *progress)
@@ -107,5 +110,113 @@ int extract(NSString* fileToExtract, NSString* extractionPath, NSProgress* progr
     archive_write_close(ext);
     archive_write_free(ext);
     
+    return 0;
+}
+
+int compress_directory(NSString* sourceDirectory, NSString* outputZipPath, NSProgress* progress)
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    BOOL isDir = NO;
+    if (![fm fileExistsAtPath:sourceDirectory isDirectory:&isDir] || !isDir) {
+        return 1;
+    }
+
+    NSDirectoryEnumerator *sizeEnum = [fm enumeratorAtPath:sourceDirectory];
+    int64_t totalBytes = 0;
+    for (NSString *subpath in sizeEnum) {
+        if (progress && progress.isCancelled) {
+            return 1;
+        }
+        NSString *fullPath = [sourceDirectory stringByAppendingPathComponent:subpath];
+        NSDictionary *attrs = [fm attributesOfItemAtPath:fullPath error:nil];
+        if ([attrs[NSFileType] isEqualToString:NSFileTypeRegular]) {
+            totalBytes += [attrs[NSFileSize] longLongValue];
+        }
+    }
+    if (progress) {
+        progress.totalUnitCount = totalBytes > 0 ? totalBytes : 1;
+        progress.completedUnitCount = 0;
+    }
+
+    struct archive *a = archive_write_new();
+    if (!a) {
+        return 1;
+    }
+    archive_write_set_format_zip(a);
+    archive_write_zip_set_compression_deflate(a);
+
+    int r = archive_write_open_filename(a, outputZipPath.fileSystemRepresentation);
+    if (r != ARCHIVE_OK) {
+        fprintf(stderr, "%s\n", archive_error_string(a));
+        archive_write_free(a);
+        return 1;
+    }
+
+    NSDirectoryEnumerator *fileEnum = [fm enumeratorAtPath:sourceDirectory];
+    for (NSString *subpath in fileEnum) {
+        if (progress && progress.isCancelled) {
+            archive_write_close(a);
+            archive_write_free(a);
+            [fm removeItemAtPath:outputZipPath error:nil];
+            return 1;
+        }
+
+        NSString *fullPath = [sourceDirectory stringByAppendingPathComponent:subpath];
+        struct stat st;
+        if (lstat(fullPath.fileSystemRepresentation, &st) != 0) {
+            continue;
+        }
+
+        struct archive_entry *entry = archive_entry_new();
+        if (!entry) {
+            continue;
+        }
+
+        NSString *entryPath = subpath;
+        if (S_ISDIR(st.st_mode) && ![entryPath hasSuffix:@"/"]) {
+            entryPath = [entryPath stringByAppendingString:@"/"];
+        }
+
+        archive_entry_set_pathname(entry, entryPath.UTF8String);
+        archive_entry_copy_stat(entry, &st);
+
+        if (S_ISLNK(st.st_mode)) {
+            char target[PATH_MAX];
+            ssize_t len = readlink(fullPath.fileSystemRepresentation, target, sizeof(target) - 1);
+            if (len != -1) {
+                target[len] = '\0';
+                archive_entry_set_symlink(entry, target);
+            }
+        }
+
+        r = archive_write_header(a, entry);
+        if (r < ARCHIVE_OK) {
+            fprintf(stderr, "%s\n", archive_error_string(a));
+        }
+
+        if (S_ISREG(st.st_mode) && st.st_size > 0) {
+            FILE *f = fopen(fullPath.fileSystemRepresentation, "rb");
+            if (f) {
+                char buffer[32768];
+                size_t bytesRead;
+                while ((bytesRead = fread(buffer, 1, sizeof(buffer), f)) > 0) {
+                    if (progress && progress.isCancelled) {
+                        break;
+                    }
+                    archive_write_data(a, buffer, bytesRead);
+                    if (progress) {
+                        progress.completedUnitCount += bytesRead;
+                    }
+                }
+                fclose(f);
+            }
+        }
+
+        archive_write_finish_entry(a);
+        archive_entry_free(entry);
+    }
+
+    archive_write_close(a);
+    archive_write_free(a);
     return 0;
 }
